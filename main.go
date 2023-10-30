@@ -10,24 +10,19 @@ import (
 func main() {
 	// Connect database
 	sql := &db.Sql{
-		Host: "localhost",
-		Port: 5432,
+		Host:     "localhost",
+		Port:     5432,
 		UserName: "annt",
 		Password: "Abc@123456789",
-		DbName: "golang",
+		DbName:   "golang",
 	}
 	sql.Connect()
 	// Call when main exit
 	defer sql.Close()
 
+	e := echo.New()
 
-    e := echo.New()
+	e.GET("/", handler.Welcome)
 
-    e.GET("/", handler.Welcome)
-
-	e.GET("/user/sign-in", handler.HandleSignIn)
-	e.GET("/user/sign-up", handler.HandleSignUp)
-
-
-    e.Logger.Fatal(e.Start(":3000"))
+	e.Logger.Fatal(e.Start(":3000"))
 }
