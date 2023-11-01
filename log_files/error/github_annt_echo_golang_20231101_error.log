@@ -9,3 +9,14 @@ time="2023-11-01T16:40:43.5601584+07:00" level=error msg="Key: 'ReqSignUp.FullNa
 time="2023-11-01T16:40:54.8579669+07:00" level=error msg="pq: duplicate key value violates unique constraint \"users_email_key\"" file="C:/Users/an.nguyen/Desktop/dev/echo-golang/repository/repo_impl/user_repo_impl.go" line=35
 time="2023-11-01T16:42:23.3247001+07:00" level=error msg="pq: duplicate key value violates unique constraint \"users_email_key\"" file="C:/Users/an.nguyen/Desktop/dev/echo-golang/repository/repo_impl/user_repo_impl.go" line=35
 time="2023-11-01T16:58:11.54523+07:00" level=error msg="pq: duplicate key value violates unique constraint \"users_email_key\"" file="C:/Users/an.nguyen/Desktop/dev/echo-golang/repository/repo_impl/user_repo_impl.go" line=35
+time="2023-11-02T01:32:32.011334+07:00" level=error msg="pq: duplicate key value violates unique constraint \"users_email_key\"" file=/Users/anthanh/Desktop/GoEcho/echo-golang/repository/repo_impl/user_repo_impl.go line=37
+time="2023-11-02T01:36:47.437191+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:39:18.343921+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:39:21.089722+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:39:22.907638+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:40:38.01208+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:42:16.349971+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:42:25.0353+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:42:29.787793+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:42:33.08541+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48
+time="2023-11-02T01:42:34.297593+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=48

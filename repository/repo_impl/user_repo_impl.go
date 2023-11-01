@@ -2,10 +2,12 @@ package repo_impl
 
 import (
 	"context"
+	"database/sql"
 	"goEcho/banana"
 	"goEcho/db"
 	log "goEcho/log"
 	"goEcho/model"
+	"goEcho/model/req"
 	"goEcho/repository"
 	"time"
 
@@ -22,7 +24,7 @@ func NewUserRepo(sql *db.Sql) repository.UserRepo {
 	}
 }
 
-func (u UserRepoImpl) SaveUser(context context.Context, user model.User) (model.User, error) {
+func (u *UserRepoImpl) SaveUser(context context.Context, user model.User) (model.User, error) {
 	statement := `
 		insert into users(user_id, email, password, role, full_name, created_at, updated_at)
 		values(:user_id, :email, :password, :role, :full_name, :created_at, :updated_at)
@@ -39,6 +41,21 @@ func (u UserRepoImpl) SaveUser(context context.Context, user model.User) (model.
 			}
 		}
 		return user, banana.SignUpFail
+	}
+
+	// Success
+	return user, nil
+}
+
+func (u *UserRepoImpl) CheckLogin(context context.Context, login req.ReqSignIn) (model.User, error) {
+	var user = model.User{}
+	err := u.sql.Db.GetContext(context, &user, "select * from users where email=$1", login.Email)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return user, banana.UserNotFound
+		}
+		log.Error(err.Error())
+		return user, err
 	}
 
 	// Success

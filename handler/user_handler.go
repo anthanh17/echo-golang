@@ -19,9 +19,55 @@ type UserHandler struct {
 }
 
 func (u *UserHandler) HandleSignIn(c echo.Context) error {
-	return c.JSON(http.StatusOK, echo.Map{
-		"user":  "An Thanh",
-		"email": "@gmail.com",
+	req := req.ReqSignIn{}
+
+	// Check request
+	if err := c.Bind(&req); err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusBadRequest, model.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    err.Error(),
+			Data:       nil,
+		})
+	}
+
+	// Validate
+	validate := validator.New()
+	if err := validate.Struct(req); err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusBadRequest, model.Response{
+			StatusCode: http.StatusBadRequest,
+			Message:    err.Error(),
+			Data:       nil,
+		})
+	}
+
+	// Check data in database
+	user, err := u.UserRepo.CheckLogin(c.Request().Context(), req)
+	if err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusUnauthorized, model.Response{
+			StatusCode: http.StatusUnauthorized,
+			Message:    err.Error(),
+			Data:       nil,
+		})
+	}
+
+	// Check password
+	isTheSame := security.ComparePasswords(user.Password, []byte(req.Password))
+	if !isTheSame {
+		log.Error(err.Error())
+		return c.JSON(http.StatusUnauthorized, model.Response{
+			StatusCode: http.StatusUnauthorized,
+			Message:    "Đăng nhập thất bại",
+			Data:       nil,
+		})
+	}
+
+	return c.JSON(http.StatusOK, model.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Login - Xử lý thành công!",
+		Data:       user,
 	})
 }
 
