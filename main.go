@@ -3,6 +3,8 @@ package main
 import (
 	"goEcho/db"
 	"goEcho/handler"
+	"goEcho/repository/repo_impl"
+	"goEcho/router"
 	"os"
 
 	log "goEcho/log"
@@ -32,11 +34,17 @@ func main() {
 	// Call when main exit
 	defer sql.Close()
 
-	log.Info("Test log error")
-
 	e := echo.New()
 
-	e.GET("/", handler.Welcome)
+	userHandler := handler.UserHandler{
+		UserRepo: repo_impl.NewUserRepo(sql),
+	}
+
+	api := router.Api{
+		Echo:        e,
+		UserHandler: userHandler,
+	}
+	api.SetupRouter()
 
 	e.Logger.Fatal(e.Start(":3000"))
 }

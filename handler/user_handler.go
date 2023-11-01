@@ -3,14 +3,20 @@ package handler
 import (
 	"goEcho/model"
 	"goEcho/model/req"
+	"goEcho/repository"
 	"goEcho/security"
 	"net/http"
 
+	"goEcho/log"
+
 	validator "github.com/go-playground/validator/v10"
+	uuid "github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
-type UserHandler struct{}
+type UserHandler struct {
+	UserRepo repository.UserRepo
+}
 
 func (u *UserHandler) HandleSignIn(c echo.Context) error {
 	return c.JSON(http.StatusOK, echo.Map{
@@ -25,6 +31,7 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 
 	// Check request
 	if err := c.Bind(&req); err != nil {
+		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, model.Response{
 			StatusCode: http.StatusBadRequest,
 			Message:    err.Error(),
@@ -35,6 +42,7 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 	// Validate
 	validate := validator.New()
 	if err := validate.Struct(req); err != nil {
+		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, model.Response{
 			StatusCode: http.StatusBadRequest,
 			Message:    err.Error(),
@@ -44,17 +52,42 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 
 	// Generate hash password
 	hash := security.HashAndSalt([]byte(req.Password))
+	role := model.MEMBER.String()
 
-	type User struct {
-		Name  string
-		Email string
-		Hash  string
+	// User ID
+	userId, err := uuid.NewUUID()
+	if err != nil {
+		log.Error(err.Error())
+		return c.JSON(http.StatusForbidden, model.Response{
+			StatusCode: http.StatusForbidden,
+			Message:    err.Error(),
+			Data:       nil,
+		})
 	}
 
-	user := User{
-		Name:  "Nguyen The An",
-		Email: "anguyenthe.work@gmail.com",
-		Hash:  hash,
+	// Insert data to database
+	user := model.User{
+		UserId:   userId.String(),
+		FullName: req.FullName,
+		Email:    req.Email,
+		Password: hash,
+		Role:     role,
+		Token:    "",
 	}
-	return c.JSON(http.StatusOK, user)
+	user, err = u.UserRepo.SaveUser(c.Request().Context(), user)
+	if err != nil {
+		return c.JSON(http.StatusConflict, model.Response{
+			StatusCode: http.StatusConflict,
+			Message:    err.Error(),
+			Data:       nil,
+		})
+	}
+
+	// If not error return token for user
+
+	return c.JSON(http.StatusOK, model.Response{
+		StatusCode: http.StatusOK,
+		Message:    "Xử lý thành công",
+		Data:       user,
+	})
 }

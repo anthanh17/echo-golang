@@ -7,6 +7,6 @@ const (
 	ADMIN
 )
 
-func (r Role) string() string {
+func (r Role) String() string {
 	return []string{"MEMBER", "ADMIN"}[r]
 }
