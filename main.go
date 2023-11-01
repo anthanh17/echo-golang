@@ -3,13 +3,23 @@ package main
 import (
 	"goEcho/db"
 	"goEcho/handler"
-	"runtime"
+	"os"
+
+	log "goEcho/log"
 
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 )
 
+// func first call when package loaded then call func main
+func init() {
+	// fmt.Println("Init package main")
+	os.Setenv("APP_NAME", "github_annt_echo_golang")
+	log.InitLogger(false)
+}
+
 func main() {
+	// fmt.Println("main function")
+
 	// Connect database
 	sql := &db.Sql{
 		Host:     "localhost",
@@ -22,20 +32,11 @@ func main() {
 	// Call when main exit
 	defer sql.Close()
 
-	logErr("Test co lôi xay ra")
+	log.Info("Test log error")
 
 	e := echo.New()
 
 	e.GET("/", handler.Welcome)
 
 	e.Logger.Fatal(e.Start(":3000"))
-}
-
-func logErr(errMsg string) {
-	_, file, line, _ := runtime.Caller(1)
-
-	log.WithFields(log.Fields{
-		"file": file,
-		"line": line,
-	}).Fatal(errMsg)
 }

@@ -10,7 +10,6 @@ import (
 
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/rifflock/lfshook"
-	"golang.org/x/text/cases"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
@@ -20,8 +19,6 @@ import (
 // Log global
 var Log *logrus.Logger
 var singletonLogger = &MyLogger{}
-
-
 
 // MyLogger extend logrus.MyLogger
 type MyLogger struct {
@@ -47,9 +44,9 @@ func InitLogger(forTest bool) *MyLogger {
 
 	if !forTest {
 		writerInfo, err := rotatelogs.New(
-			"./log_files/info/" + os.Getenv("APP_NAME") + "_%Y%m%d_info.log",
-			rotatelogs.WithMaxAge(30 * 24 * time.Hour),
-			rotatelogs.WithRotationTime(24 * time.Hour),
+			"./log_files/info/"+os.Getenv("APP_NAME")+"_%Y%m%d_info.log",
+			rotatelogs.WithMaxAge(30*24*time.Hour),
+			rotatelogs.WithRotationTime(24*time.Hour),
 		)
 		if err != nil {
 			log.Printf("Failed to create rotatelogs:  %s", err)
@@ -57,9 +54,9 @@ func InitLogger(forTest bool) *MyLogger {
 		}
 
 		writerError, err := rotatelogs.New(
-			"./log_files/error/" + os.Getenv("APP_NAME") + "_%Y%m%d_error.log",
-			rotatelogs.WithMaxAge(30 * 24 * time.Hour),
-			rotatelogs.WithRotationTime(24 * time.Hour),
+			"./log_files/error/"+os.Getenv("APP_NAME")+"_%Y%m%d_error.log",
+			rotatelogs.WithMaxAge(30*24*time.Hour),
+			rotatelogs.WithRotationTime(24*time.Hour),
 		)
 		if err != nil {
 			log.Printf("Failed to create rotatelogs:  %s", err)
@@ -69,11 +66,11 @@ func InitLogger(forTest bool) *MyLogger {
 		Log.Hooks.Add(lfshook.NewHook(
 			lfshook.WriterMap{
 				logrus.ErrorLevel: writerError,
-				logrus.WarnLevel: writerInfo,
-				logrus.InfoLevel: writerInfo,
+				logrus.WarnLevel:  writerInfo,
+				logrus.InfoLevel:  writerInfo,
 			},
-			&logrus.TextFormatter {
-				TimestampFormat: time.RFC3339Nano,
+			&logrus.TextFormatter{
+				TimestampFormat:  time.RFC3339Nano,
 				QuoteEmptyFields: true,
 			},
 		))
@@ -86,15 +83,15 @@ func InitLogger(forTest bool) *MyLogger {
 }
 
 // LoggerHandler middleware log the infomation about each Http request.
-func LoggerHandler(next echo.HandlerFunc) echo.HandlerFunc  {
+func LoggerHandler(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		req := ctx.Request()
 		if !strings.Contains(req.RequestURI, "healthcheck") {
 			// add some default fields to the logger ~ on all messages
 			logger := Log.WithFields(logrus.Fields{
-				"id": req.Header.Get(echo.HeaderXRequestID),
-				"method": req.Method,
-				"ip": ctx.RealIP(),
+				"id":          req.Header.Get(echo.HeaderXRequestID),
+				"method":      req.Method,
+				"ip":          ctx.RealIP(),
 				"request_uri": req.RequestURI,
 			})
 			ctx.Set("logger", logger)
@@ -104,15 +101,15 @@ func LoggerHandler(next echo.HandlerFunc) echo.HandlerFunc  {
 				rsp := ctx.Response()
 				// at the end we will want to log a few more interesting fields
 				logger.WithFields(logrus.Fields{
-					"status_code": rsp.Status,
+					"status_code":  rsp.Status,
 					"runtime_nano": time.Since(startTime).Nanoseconds(),
 				}).Info("Finished request")
 			}()
 
 			// now we will log out that we have actually started the request
 			logger.WithFields(logrus.Fields{
-				"id": req.Header.Get(echo.HeaderXRequestID),
-				"user_agent": req.UserAgent(),
+				"id":             req.Header.Get(echo.HeaderXRequestID),
+				"user_agent":     req.UserAgent(),
 				"content_length": req.ContentLength,
 			}).Info("Starting request")
 		}
@@ -278,7 +275,7 @@ func toLogrusLevel(level log.Lvl) logrus.Level {
 	case log.ERROR:
 		return logrus.ErrorLevel
 	}
-	
+
 	return logrus.InfoLevel
 }
 
@@ -365,12 +362,12 @@ func (l *MyLogger) Printj(j log.JSON) {
 }
 
 // Debug output message of debug level
-func (l &MyLogger) Debug(i ...interface{})  {
+func (l *MyLogger) Debug(i ...interface{}) {
 	l.Logger.Info(i...)
 }
 
 // Debugf output message of debug level
-func (l &MyLogger) Debugf(format string, args ...interface{})  {
+func (l *MyLogger) Debugf(format string, args ...interface{}) {
 	l.Logger.Debugf(format, args...)
 }
 
@@ -381,4 +378,103 @@ func (l *MyLogger) Debugj(j log.JSON) {
 		panic(err)
 	}
 	l.Logger.Debugln(string(b))
+}
+
+// Info output message of Info level
+func (l *MyLogger) Info(i ...interface{}) {
+	l.Logger.Info(i...)
+}
+
+// Infof output message of info level
+func (l *MyLogger) Infof(format string, args ...interface{}) {
+	l.Logger.Infof(format, args...)
+}
+
+// Infoj output message of info level
+func (l *MyLogger) Infoj(j log.JSON) {
+	b, err := json.Marshal(j)
+	if err != nil {
+		panic(err)
+	}
+	l.Logger.Infoln(string(b))
+}
+
+// Warn output message of warn level
+func (l *MyLogger) Warn(i ...interface{}) {
+	l.Logger.Warn(i...)
+}
+
+// Warnf output message of warn level
+func (l *MyLogger) Warnf(format string, args ...interface{}) {
+	l.Logger.Warnf(format, args...)
+}
+
+// Warnj output message of warn level
+func (l *MyLogger) Warnj(j log.JSON) {
+	b, err := json.Marshal(j)
+	if err != nil {
+		panic(err)
+	}
+	l.Logger.Warnln(string(b))
+}
+
+// Error output message of Error level
+func (l *MyLogger) Error(i ...interface{}) {
+	l.Logger.Error(i...)
+}
+
+// Errorf output message of error level
+func (l *MyLogger) Errorf(format string, args ...interface{}) {
+	l.Logger.Errorf(format, args...)
+}
+
+// Errorj output message of error level
+func (l *MyLogger) Errorj(j log.JSON) {
+	b, err := json.Marshal(j)
+	if err != nil {
+		panic(err)
+	}
+	l.Logger.Errorln(string(b))
+}
+
+// Fatal output message of Fatal level
+func (l *MyLogger) Fatal(i ...interface{}) {
+	l.Logger.Fatal(i...)
+}
+
+// Fatalf output message of Fatal level
+func (l *MyLogger) Fatalf(format string, args ...interface{}) {
+	l.Logger.Fatalf(format, args...)
+}
+
+// Fatalj output message of Fatal level
+func (l *MyLogger) Fatalj(j log.JSON) {
+	b, err := json.Marshal(j)
+	if err != nil {
+		panic(err)
+	}
+	l.Logger.Fatalln(string(b))
+}
+
+// Panic output message of Panic level
+func (l *MyLogger) Panic(i ...interface{}) {
+	l.Logger.Panic(i...)
+}
+
+// Panicf output message of Panic level
+func (l *MyLogger) Panicf(format string, args ...interface{}) {
+	l.Logger.Panicf(format, args...)
+}
+
+// Panicj output message of Panic level
+func (l *MyLogger) Panicj(j log.JSON) {
+	b, err := json.Marshal(j)
+	if err != nil {
+		panic(err)
+	}
+	l.Logger.Panicln(string(b))
+}
+
+func (l *MyLogger) SetHeader(h string) {
+	l.Logger.Info("No implement yet")
 }

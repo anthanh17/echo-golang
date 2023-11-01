@@ -48,11 +48,13 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 	type User struct {
 		Name  string
 		Email string
+		Hash  string
 	}
 
 	user := User{
 		Name:  "Nguyen The An",
 		Email: "anguyenthe.work@gmail.com",
+		Hash:  hash,
 	}
 	return c.JSON(http.StatusOK, user)
 }
