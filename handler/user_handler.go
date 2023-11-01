@@ -84,7 +84,7 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 	}
 
 	// If not error return token for user
-
+	user.Password = "" // Skip password print when call api
 	return c.JSON(http.StatusOK, model.Response{
 		StatusCode: http.StatusOK,
 		Message:    "Xử lý thành công",
