@@ -1,1 +1,10 @@
 time="2023-11-02T12:50:25.925171+07:00" level=error msg="pq: duplicate key value violates unique constraint \"users_email_key\"" file="C:/Users/an.nguyen/Desktop/dev/echo-golang/repository/repo_impl/user_repo_impl.go" line=37
+time="2023-11-02T22:45:15.298674+07:00" level=error msg="key is of invalid type" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=147
+time="2023-11-02T22:45:28.089198+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=125
+time="2023-11-02T22:45:29.916103+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=125
+time="2023-11-02T22:45:33.331189+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=125
+time="2023-11-02T22:45:38.159047+07:00" level=error msg="Người dùng không tồn tại!" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=125
+time="2023-11-02T22:58:26.086212+07:00" level=error msg="validator not registered" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=101
+time="2023-11-02T22:58:37.502447+07:00" level=error msg="validator not registered" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=101
+time="2023-11-02T22:58:49.675624+07:00" level=error msg="validator not registered" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=101
+time="2023-11-02T22:59:02.627156+07:00" level=error msg="validator not registered" file=/Users/anthanh/Desktop/GoEcho/echo-golang/handler/user_handler.go line=101

@@ -3,6 +3,7 @@ module goEcho
 go 1.21.3
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-playground/validator/v10 v10.15.5
 	github.com/google/uuid v1.4.0
 	github.com/jmoiron/sqlx v1.3.5
@@ -22,7 +23,6 @@ require (
 	github.com/armon/go-radix v1.0.0 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
 	github.com/denisenkom/go-mssqldb v0.9.0 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-gorp/gorp/v3 v3.1.0 // indirect
