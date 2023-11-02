@@ -1,0 +1,1 @@
+time="2023-11-02T12:50:25.925171+07:00" level=error msg="pq: duplicate key value violates unique constraint \"users_email_key\"" file="C:/Users/an.nguyen/Desktop/dev/echo-golang/repository/repo_impl/user_repo_impl.go" line=37

@@ -9,16 +9,20 @@ import (
 	"time"
 
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
-	"github.com/rifflock/lfshook"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
+	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
 )
 
 // Log global
 var Log *logrus.Logger
 var singletonLogger = &MyLogger{}
+
+/*func init() {
+	InitLogger(false)
+}*/
 
 // MyLogger extend logrus.MyLogger
 type MyLogger struct {
@@ -49,7 +53,7 @@ func InitLogger(forTest bool) *MyLogger {
 			rotatelogs.WithRotationTime(24*time.Hour),
 		)
 		if err != nil {
-			log.Printf("Failed to create rotatelogs:  %s", err)
+			log.Printf("Failed to create rotatelogs: %s", err)
 			return nil
 		}
 
@@ -59,7 +63,7 @@ func InitLogger(forTest bool) *MyLogger {
 			rotatelogs.WithRotationTime(24*time.Hour),
 		)
 		if err != nil {
-			log.Printf("Failed to create rotatelogs:  %s", err)
+			log.Printf("Failed to create rotatelogs: %s", err)
 			return nil
 		}
 
@@ -82,7 +86,7 @@ func InitLogger(forTest bool) *MyLogger {
 	return singletonLogger
 }
 
-// LoggerHandler middleware log the infomation about each Http request.
+// LoggerHandler middleware logs the information about each HTTP request.
 func LoggerHandler(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		req := ctx.Request()
@@ -122,9 +126,9 @@ func LoggerHandler(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// ---------------------
+// -----------------------------------
 // Logger uses for trace
-// ---------------------
+// -----------------------------------
 
 // Args output message of print level
 func Args(mess string, args ...interface{}) {
@@ -164,16 +168,16 @@ func Debug(i ...interface{}) {
 	}).Debug(i...)
 }
 
-// Debugf output message of debug level
-func Debugf(format string, i ...interface{}) {
+// Debugf output format message of debug level
+func Debugf(format string, args ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
 		"file": file,
 		"line": line,
-	}).Debugf(format, i...)
+	}).Debugf(format, args...)
 }
 
-// Info output message of debug level
+// Info output message of info level
 func Info(i ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
@@ -182,16 +186,16 @@ func Info(i ...interface{}) {
 	}).Info(i...)
 }
 
-// Infof output message of debug level
-func Infof(format string, i ...interface{}) {
+// Infof output format message of info level
+func Infof(format string, args ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
 		"file": file,
 		"line": line,
-	}).Infof(format, i...)
+	}).Infof(format, args...)
 }
 
-// Warn output message of debug level
+// Warn output message of warn level
 func Warn(i ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
@@ -200,16 +204,16 @@ func Warn(i ...interface{}) {
 	}).Warn(i...)
 }
 
-// Warnf output message of debug level
-func Warnf(format string, i ...interface{}) {
+// Warnf output format message of warn level
+func Warnf(format string, args ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
 		"file": file,
 		"line": line,
-	}).Warnf(format, i...)
+	}).Warnf(format, args...)
 }
 
-// Error output message of debug level
+// Error output message of error level
 func Error(i ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
@@ -218,16 +222,16 @@ func Error(i ...interface{}) {
 	}).Error(i...)
 }
 
-// Errorf output message of debug level
-func Errorf(format string, i ...interface{}) {
+// Errorf output format message of error level
+func Errorf(format string, args ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
 		"file": file,
 		"line": line,
-	}).Errorf(format, i...)
+	}).Errorf(format, args...)
 }
 
-// Fatal output message of debug level
+// Fatal output message of fatal level
 func Fatal(i ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
@@ -236,16 +240,16 @@ func Fatal(i ...interface{}) {
 	}).Fatal(i...)
 }
 
-// Fatalf output message of debug level
-func Fatalf(format string, i ...interface{}) {
+// Fatalf output format message of fatal level
+func Fatalf(format string, args ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
 		"file": file,
 		"line": line,
-	}).Fatalf(format, i...)
+	}).Fatalf(format, args...)
 }
 
-// Panic output message of debug level
+// Panic output message of panic level
 func Panic(i ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
@@ -254,13 +258,13 @@ func Panic(i ...interface{}) {
 	}).Panic(i...)
 }
 
-// Panicf output message of debug level
-func Panicf(format string, i ...interface{}) {
+// Panicf output format message of panic level
+func Panicf(format string, args ...interface{}) {
 	_, file, line, _ := runtime.Caller(1)
 	singletonLogger.WithFields(logrus.Fields{
 		"file": file,
 		"line": line,
-	}).Panicf(format, i...)
+	}).Panicf(format, args...)
 }
 
 // To logrus.Level
@@ -307,7 +311,7 @@ func (l *MyLogger) SetOutput(w io.Writer) {
 
 // Level return logger level
 func (l *MyLogger) Level() log.Lvl {
-	return toEchoLevel((l.Logger.Level))
+	return toEchoLevel(l.Logger.Level)
 }
 
 // SetLevel logger level
@@ -335,24 +339,24 @@ func (l *MyLogger) Prefix() string {
 // SetPrefix logger prefix
 // This function do nothing
 func (l *MyLogger) SetPrefix(p string) {
-	// nothing
+	// do nothing
 }
 
-// -------------------
+// -----------------------------------
 // Logger uses for Echo
-// -------------------
+// -----------------------------------
 
 // Print output message of print level
 func (l *MyLogger) Print(i ...interface{}) {
 	l.Logger.Print(i...)
 }
 
-// Printf output message of print level
+// Printf output format message of print level
 func (l *MyLogger) Printf(format string, args ...interface{}) {
 	l.Logger.Printf(format, args...)
 }
 
-// Printj output message of print level
+// Printj output json of print level
 func (l *MyLogger) Printj(j log.JSON) {
 	b, err := json.Marshal(j)
 	if err != nil {
@@ -366,7 +370,7 @@ func (l *MyLogger) Debug(i ...interface{}) {
 	l.Logger.Info(i...)
 }
 
-// Debugf output message of debug level
+// Debugf output format message of debug level
 func (l *MyLogger) Debugf(format string, args ...interface{}) {
 	l.Logger.Debugf(format, args...)
 }
@@ -380,17 +384,17 @@ func (l *MyLogger) Debugj(j log.JSON) {
 	l.Logger.Debugln(string(b))
 }
 
-// Info output message of Info level
+// Info output message of info level
 func (l *MyLogger) Info(i ...interface{}) {
 	l.Logger.Info(i...)
 }
 
-// Infof output message of info level
+// Infof output format message of info level
 func (l *MyLogger) Infof(format string, args ...interface{}) {
 	l.Logger.Infof(format, args...)
 }
 
-// Infoj output message of info level
+// Infoj output json of info level
 func (l *MyLogger) Infoj(j log.JSON) {
 	b, err := json.Marshal(j)
 	if err != nil {
@@ -404,12 +408,12 @@ func (l *MyLogger) Warn(i ...interface{}) {
 	l.Logger.Warn(i...)
 }
 
-// Warnf output message of warn level
+// Warnf output format message of warn level
 func (l *MyLogger) Warnf(format string, args ...interface{}) {
 	l.Logger.Warnf(format, args...)
 }
 
-// Warnj output message of warn level
+// Warnj output json of warn level
 func (l *MyLogger) Warnj(j log.JSON) {
 	b, err := json.Marshal(j)
 	if err != nil {
@@ -418,17 +422,17 @@ func (l *MyLogger) Warnj(j log.JSON) {
 	l.Logger.Warnln(string(b))
 }
 
-// Error output message of Error level
+// Error output message of error level
 func (l *MyLogger) Error(i ...interface{}) {
 	l.Logger.Error(i...)
 }
 
-// Errorf output message of error level
+// Errorf output format message of error level
 func (l *MyLogger) Errorf(format string, args ...interface{}) {
 	l.Logger.Errorf(format, args...)
 }
 
-// Errorj output message of error level
+// Errorj output json of error level
 func (l *MyLogger) Errorj(j log.JSON) {
 	b, err := json.Marshal(j)
 	if err != nil {
@@ -437,17 +441,17 @@ func (l *MyLogger) Errorj(j log.JSON) {
 	l.Logger.Errorln(string(b))
 }
 
-// Fatal output message of Fatal level
+// Fatal output message of fatal level
 func (l *MyLogger) Fatal(i ...interface{}) {
 	l.Logger.Fatal(i...)
 }
 
-// Fatalf output message of Fatal level
+// Fatalf output format message of fatal level
 func (l *MyLogger) Fatalf(format string, args ...interface{}) {
 	l.Logger.Fatalf(format, args...)
 }
 
-// Fatalj output message of Fatal level
+// Fatalj output json of fatal level
 func (l *MyLogger) Fatalj(j log.JSON) {
 	b, err := json.Marshal(j)
 	if err != nil {
@@ -456,17 +460,17 @@ func (l *MyLogger) Fatalj(j log.JSON) {
 	l.Logger.Fatalln(string(b))
 }
 
-// Panic output message of Panic level
+// Panic output message of panic level
 func (l *MyLogger) Panic(i ...interface{}) {
 	l.Logger.Panic(i...)
 }
 
-// Panicf output message of Panic level
+// Panicf output format message of panic level
 func (l *MyLogger) Panicf(format string, args ...interface{}) {
 	l.Logger.Panicf(format, args...)
 }
 
-// Panicj output message of Panic level
+// Panicj output json of panic level
 func (l *MyLogger) Panicj(j log.JSON) {
 	b, err := json.Marshal(j)
 	if err != nil {
@@ -476,5 +480,5 @@ func (l *MyLogger) Panicj(j log.JSON) {
 }
 
 func (l *MyLogger) SetHeader(h string) {
-	l.Logger.Info("No implement yet")
+	l.Logger.Info("Not implement yet")
 }

@@ -1,40 +1,44 @@
 -- +migrate Up
-create table "users" (
-    "user_id" text primary key,
-    "full_name" text,
-    "email" text unique,
-    "password" text,
-    "role" text,
-    "created_at" timestamptz not null,
-    "updated_at" timestamptz not null
+CREATE TABLE "users" (
+  "user_id" text PRIMARY KEY,
+  "full_name" text,
+  "email" text UNIQUE,
+  "password" text,
+  "role" text,
+  "created_at" TIMESTAMPTZ NOT NULL,
+  "updated_at" TIMESTAMPTZ NOT NULL
 );
 
-create table "repos" (
-    "name" text primary key,
-    "description" text,
-    "url" text unique,
-    "color" text,
-    "lang" text,
-    "fork" text,
-    "stars" text,
-    "stars_today" text,
-    "build_by" text,
-    "created_at" timestamptz not null,
-    "updated_at" timestamptz not null
+CREATE TABLE "repos" (
+  "name" text PRIMARY KEY,
+  "description" text,
+  "url" text,
+  "color" text,
+  "lang" text,
+  "fork" text,
+  "stars" text,
+  "stars_today" text,
+  "build_by" text,
+  "created_at" TIMESTAMPTZ NOT NULL,
+  "updated_at" TIMESTAMPTZ NOT NULL
 );
 
-create table "bookmarks" (
-    "bid" text primary key,
-    "user_id" text unique,
-    "repo_name" text,
-    "created_at" timestamptz not null,
-    "updated_at" timestamptz not null
+CREATE TABLE "bookmarks" (
+  "bid" text PRIMARY KEY,
+  "user_id" text,
+  "repo_name" text,
+  "created_at" TIMESTAMPTZ NOT NULL,
+  "updated_at" TIMESTAMPTZ NOT NULL,
+  unique (user_id, repo_name)
 );
 
-alter table "bookmarks" add foreign key ("user_id") references "users" ("user_id");
-alter table "bookmarks" add foreign key ("repo_name") references "repos" ("name");
+
+--ALTER TABLE "bookmarks" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
+-- p0EE6bmdpH5cpLeu
+--https://cloud.google.com/vpc/docs/using-firewalls#creating_firewall_rules
+ALTER TABLE "bookmarks" ADD FOREIGN KEY ("repo_name") REFERENCES "repos" ("name");
 
 -- +migrate Down
-drop table bookmarks;
-drop table users;
-drop table repos;
+DROP TABLE bookmarks;
+DROP TABLE users;
+DROP TABLE repos;
