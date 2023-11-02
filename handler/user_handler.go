@@ -19,10 +19,7 @@ type UserHandler struct {
 }
 
 func (u *UserHandler) HandleSignUp(c echo.Context) error {
-
 	req := req.ReqSignUp{}
-
-	// Check request
 	if err := c.Bind(&req); err != nil {
 		log.Error(err.Error())
 		return c.JSON(http.StatusBadRequest, model.Response{
@@ -42,12 +39,10 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 			Data:       nil,
 		})
 	}
-
 	// Generate hash password
 	hash := security.HashAndSalt([]byte(req.Password))
 	role := model.MEMBER.String()
 
-	// User ID
 	userId, err := uuid.NewUUID()
 	if err != nil {
 		log.Error(err.Error())
@@ -67,6 +62,7 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 		Role:     role,
 		Token:    "",
 	}
+
 	user, err = u.UserRepo.SaveUser(c.Request().Context(), user)
 	if err != nil {
 		return c.JSON(http.StatusConflict, model.Response{
@@ -76,7 +72,6 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 		})
 	}
 
-	// Gen token
 	token, err := security.GenToken(user)
 	if err != nil {
 		log.Error(err)
@@ -97,7 +92,6 @@ func (u *UserHandler) HandleSignUp(c echo.Context) error {
 
 func (u *UserHandler) HandleSignIn(c echo.Context) error {
 	req := req.ReqSignIn{}
-
 	// Check request
 	if err := c.Bind(&req); err != nil {
 		log.Error(err.Error())
@@ -119,10 +113,8 @@ func (u *UserHandler) HandleSignIn(c echo.Context) error {
 		})
 	}
 
-	// Check data in database
 	user, err := u.UserRepo.CheckLogin(c.Request().Context(), req)
 	if err != nil {
-		log.Error(err.Error())
 		return c.JSON(http.StatusUnauthorized, model.Response{
 			StatusCode: http.StatusUnauthorized,
 			Message:    err.Error(),
@@ -130,10 +122,9 @@ func (u *UserHandler) HandleSignIn(c echo.Context) error {
 		})
 	}
 
-	// Check password
+	// check pass
 	isTheSame := security.ComparePasswords(user.Password, []byte(req.Password))
 	if !isTheSame {
-		log.Error(err.Error())
 		return c.JSON(http.StatusUnauthorized, model.Response{
 			StatusCode: http.StatusUnauthorized,
 			Message:    "Đăng nhập thất bại",
@@ -141,7 +132,6 @@ func (u *UserHandler) HandleSignIn(c echo.Context) error {
 		})
 	}
 
-	// Gen token
 	token, err := security.GenToken(user)
 	if err != nil {
 		log.Error(err)
@@ -155,7 +145,7 @@ func (u *UserHandler) HandleSignIn(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, model.Response{
 		StatusCode: http.StatusOK,
-		Message:    "Login - Xử lý thành công!",
+		Message:    "Xử lý thành công",
 		Data:       user,
 	})
 }
