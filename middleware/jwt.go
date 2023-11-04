@@ -8,11 +8,11 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func JWTMiddleware() echo.MiddlewareFunc  {
+func JWTMiddleware() echo.MiddlewareFunc {
 	config := middleware.JWTConfig{
-		Claims: &model.JwtCustomClaims{},
-		SigningKey: security.SECRET_KEY,
+		Claims:     &model.JwtCustomClaims{},
+		SigningKey: []byte(security.SECRET_KEY),
 	}
 
-	return middleware.JWTConfig(config)
+	return middleware.JWTWithConfig(config)
 }

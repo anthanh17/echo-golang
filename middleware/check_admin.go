@@ -21,6 +21,7 @@ func IsAdmin() echo.MiddlewareFunc {
 				})
 			}
 
+			// Check add condition
 			if req.Email != "admin@gmail.com" {
 				return c.JSON(http.StatusBadRequest, model.Response{
 					StatusCode: http.StatusBadRequest,
@@ -28,7 +29,7 @@ func IsAdmin() echo.MiddlewareFunc {
 					Data:       nil,
 				})
 			}
-
+			// If all condition done then next handler function
 			return next(c)
 		}
 	}

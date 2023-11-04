@@ -151,5 +151,9 @@ func (u *UserHandler) HandleSignIn(c echo.Context) error {
 }
 
 func (u *UserHandler) Profile(c echo.Context) error {
-	return nil
+	return c.JSON(http.StatusOK, model.Response{
+		StatusCode: http.StatusOK,
+		Message:    "profile handler",
+		Data:       nil,
+	})
 }
