@@ -7,5 +7,5 @@ import (
 )
 
 func Welcome(c echo.Context) error {
-	return c.String(http.StatusOK, "Home page")
+	return c.String(http.StatusOK, "Welcome to my mapp")
 }

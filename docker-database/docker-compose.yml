@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: echo-postgres-container
+    environment:
+      POSTGRES_USER: annt
+      POSTGRES_PASSWORD: Abc@123456789
+      POSTGRES_DB: golang
+    ports:
+      - "5432:5432" # Map host port 4000 to container port 5432
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data # Mount a volume for persistent data storage
+    restart: always
+# You can add more services or configurations here if needed

@@ -1,21 +1,22 @@
-# Use an official PostgreSQL runtime as a parent image
-FROM postgres:latest
+FROM golang:1.12-alpine
 
-# Set environment variables for PostgreSQL
-ENV POSTGRES_USER=myuser
-ENV POSTGRES_PASSWORD=mypassword
-ENV POSTGRES_DB=mydb
+RUN apk update && apk add git
 
-# Optionally, expose the PostgreSQL port (5432) if needed
-# EXPOSE 5432
+ENV GO111MODULE=on
 
-# Copy an initialization SQL script into the container
-COPY init.sql /docker-entrypoint-initdb.d/
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
-# The init.sql file should contain SQL commands to initialize your database
-# For example, you can create tables and insert data
-# Example init.sql content:
-# CREATE TABLE mytable (id serial PRIMARY KEY, name VARCHAR(255));
-# INSERT INTO mytable (name) VALUES ('John');
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+WORKDIR $GOPATH/src/backend-github-trending
 
-# You can also mount volumes, manage settings, and configure authentication as needed
+COPY . .
+
+RUN go mod init backend-github-trending
+
+WORKDIR cmd/pro
+RUN GOOS=linux go build -o app
+
+ENTRYPOINT ["./app"]
+
+EXPOSE 3000

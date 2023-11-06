@@ -1,0 +1,2 @@
+time="2023-11-06T10:43:01.1079571+07:00" level=error msg="Mật khẩu tối thiểu 8 kí tự" file="C:/Users/an.nguyen/Desktop/dev/echo-golang/handler/user_handler.go" line=44
+time="2023-11-06T10:43:17.8969969+07:00" level=error msg="Mật khẩu tối thiểu 8 kí tự" file="C:/Users/an.nguyen/Desktop/dev/echo-golang/handler/user_handler.go" line=44

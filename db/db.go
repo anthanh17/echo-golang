@@ -1,8 +1,8 @@
 package db
 
+// https://github.com/rubenv/sql-migrate
 import (
 	"fmt"
-
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
 	_ "github.com/lib/pq"
@@ -28,7 +28,7 @@ func (s *Sql) Connect() {
 		return
 	}
 
-	fmt.Println("Connect database OK!!!")
+	fmt.Println("Connect database ok")
 }
 
 func (s *Sql) Close() {

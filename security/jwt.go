@@ -7,7 +7,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-const SECRET_KEY = "ant_echo_golang"
+const JWT_KEY = "hhhgfdshgfhsdgfshjgfshjdgf"
 
 func GenToken(user model.User) (string, error) {
 	claims := &model.JwtCustomClaims{
@@ -19,9 +19,10 @@ func GenToken(user model.User) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	result, err := token.SignedString([]byte(SECRET_KEY))
+	tokenString, err := token.SignedString([]byte(JWT_KEY))
 	if err != nil {
 		return "", err
 	}
-	return result, nil
+
+	return tokenString, nil
 }

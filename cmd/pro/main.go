@@ -17,7 +17,7 @@ import (
 )
 
 func init() {
-	fmt.Println("DEV ENVIROMENT")
+	fmt.Println("PRODUCTION ENVIROMENT")
 	os.Setenv("APP_NAME", "github")
 	log.InitLogger(false)
 }
@@ -41,10 +41,10 @@ func init() {
 // @BasePath /
 func main() {
 	sql := &db.Sql{
-		Host:     "localhost", //localhost,host.docker.internal
+		Host:     "host.docker.internal", //localhost,host.docker.internal
 		Port:     5432,
-		UserName: "annt",
-		Password: "Abc@123456789",
+		UserName: "ryan",
+		Password: "postgres",
 		DbName:   "golang",
 	}
 	sql.Connect()
